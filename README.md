@@ -18,6 +18,14 @@ An efficient, low-cost, and reliable 4-Degree of Freedom (4-DOF) robotic arm des
 | **4-DOF Acrylic Frame** | 1 | Mechanical chassis and link structure of the manipulator |
 | **Jumper Wires** | Pack | Signal routing and common ground connections |
 
+## 🔌 System Wiring & Diagram
+To avoid microcontroller brownouts, the servos are powered by an external 5V 3A supply through the PCA9685 terminal block.
+- **SDA/SCL:** I2C communication link between Arduino and Driver.
+- **Common GND:** Essential for signal integrity across all components.
+
+> 📸 **Drop your Wiring Diagram Photo below (اسحب صورة مخطط التوصيل والأردوينو هنا):**
+![System Wiring Diagram](https://via.placeholder.com/800x400?text=Insert+Your+Wiring+Diagram+Here)
+
 ## 📐 Motion Sequence & Constraints
 To ensure physical protection and mechanical integrity, all joint movements are digitally locked within safety limits via the code logic (`constrain` limits):
 - **Base Joint (`BASE_CH`)**: `0°` to `90°`
@@ -31,10 +39,17 @@ To ensure physical protection and mechanical integrity, all joint movements are 
 3. **Lift & Transfer** $\rightarrow$ Arm raises safely, base rotates to placement position.
 4. **Release & Reset** $\rightarrow$ Links lower at target destination, claw opens, and the arm swings back to home.
 
-## 🔌 Wiring Layout
-- **Protocol**: I2C communication via `SDA` and `SCL` between Arduino and PCA9685.
-- **Power Separation**: Servos are powered strictly via the PCA9685 terminal block through the 5V external adapter.
-- **Signal Integrity**: A **Common Ground (GND)** is explicitly wired between the Arduino board and the external power supply.
+## 🎬 Live Demo & Visuals
+> 💡 *This section displays the actual project functionality and mechanical implementation.*
+
+### 🎥 Project Video (التطبيق الحي للروبوت)
+> 🎬 **Drop your Video file below (اسحب ملف الفيديو حق الروبوت وهو يتحرك هنا ليعمل مباشرة):**
+[Watch the Robotic Arm in Action](https://via.placeholder.com/800x450?text=Drag+and+Drop+Your+Project+Video+Here)
+
+### 📸 Project Photos
+| Hardware Setup | Robotic Arm Side View |
+| :---: | :---: |
+| ![Setup](https://via.placeholder.com/400x300?text=Setup+Photo) | ![Side View](https://via.placeholder.com/400x300?text=Robotic+Arm+Photo) |
 
 ## 🔮 Future Enhancements
 - **Inverse Kinematics**: Implementation of coordinate-based target tracking instead of hardcoded angles.
