@@ -1,5 +1,9 @@
 # 4-DOF Pick-and-Place Robotic Arm
 
+## 🎥 Project Demonstration
+
+<img width="600" height="337" alt="ezgif-65724d8e6520d0eb" src="https://github.com/user-attachments/assets/925d9bd0-48e1-4535-a235-f94e9200682b" />
+
 An efficient, low-cost, and reliable 4-Degree of Freedom (4-DOF) robotic arm designed and implemented for automated point-to-point pick-and-place operations. This project features hardware integration between an Arduino Uno and a dedicated PCA9685 PWM servo driver to ensure smooth and accurate mechanical motion.
 
 ## 🚀 Objectives
