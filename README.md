@@ -18,43 +18,58 @@ An efficient, low-cost, and reliable 4-Degree of Freedom (4-DOF) robotic arm des
 | **4-DOF Acrylic Frame** | 1 | Mechanical chassis and link structure of the manipulator |
 | **Jumper Wires** | Pack | Signal routing and common ground connections |
 
-## 🔌 System Wiring & Diagram
-To avoid microcontroller brownouts, the servos are powered by an external 5V 3A supply through the PCA9685 terminal block.
-- **SDA/SCL:** I2C communication link between Arduino and Driver.
-- **Common GND:** Essential for signal integrity across all components.
+## 🔌 System Wiring & Detailed Architecture
+To completely isolate heavy servo motor induction and avoid Arduino Uno hardware brownouts, the power and signals are mapped using a centralized configuration:
 
-> <img width="687" height="586" alt="image" src="https://github.com/user-attachments/assets/85d2377a-5901-4815-ac53-45f2f3c408a4" />
- 
-## 📐 Motion Sequence & Constraints
-To ensure physical protection and mechanical integrity, all joint movements are digitally locked within safety limits via the code logic (`constrain` limits):
-- **Base Joint (`BASE_CH`)**: `0°` to `90°`
-- **Left Linkage (`LEFT_CH`)**: `0°` to `90°`
-- **Right Linkage (`RIGHT_CH`)**: `40°` to `120°`
-- **Claw/Gripper (`CLAW_CH`)**: Open `60°` | Close `90°`
+### 📍 Hardware Port Mapping
+- **I2C Interface:** Arduino `SDA (A4)` $\rightarrow$ PCA9685 `SDA` | Arduino `SCL (A5)` $\rightarrow$ PCA9685 `SCL`.
+- **Power Delivery:** Servos run directly from the **5V 3A External DC Adapter** routed through the PCA9685 blue screw terminal block.
+- **Common Ground:** Arduino `GND` is tied to the external power supply `GND` for baseline signal reference.
 
-### Operational Loop:
-1. **Home/Standby Position** $\rightarrow$ Arm resets to starting angles.
-2. **Approach & Pick** $\rightarrow$ Base rotates to approach position, link lowers, claw clamps object.
-3. **Lift & Transfer** $\rightarrow$ Arm raises safely, base rotates to placement position.
-4. **Release & Reset** $\rightarrow$ Links lower at target destination, claw opens, and the arm swings back to home.
+### 🎛️ PCA9685 Servo Channel Routing
+| Channel (CH) | Servo Motor Function | Code Variable | Safety Constraints |
+| :---: | :--- | :--- | :--- |
+| **Channel 0** | **Base Servo** (Horizontal Rotation Control) | `BASE_CH` | $0^\circ \text{ to } 90^\circ$ |
+| **Channel 1** | **Right Servo** (Right Linkage/Arm Control) | `RIGHT_CH` | $40^\circ \text{ to } 120^\circ$ |
+| **Channel 2** | **Left Servo** (Left Linkage/Arm Control) | `LEFT_CH` | $0^\circ \text{ to } 90^\circ$ |
+| **Channel 3** | **Claw/Gripper** (Claw Open & Close Control) | `CLAW_CH` | Open: $60^\circ$ \| Close: $90^\circ$ |
 
-## 🎬 Live Demo & Visuals
-> 💡 *This section displays the actual project functionality and mechanical implementation.*
+> <img width="597" height="514" alt="image" src="https://github.com/user-attachments/assets/0f55f531-b225-44d8-8541-e01be7fc1dc0" />
+---
 
-### 🎥 Project Video (التطبيق الحي للروبوت)
-> 🎬 **Drop your Video file below (اسحب ملف الفيديو حق الروبوت وهو يتحرك هنا ليعمل مباشرة):**
-[Watch the Robotic Arm in Action](https://via.placeholder.com/800x450?text=Drag+and+Drop+Your+Project+Video+Here)
+## 💻 Control Logic & Code Architecture
+The software implementation utilizes direct mapping from raw degrees into safe duty-cycle PWM timeslices using a core embedded function:
 
+ ```cpp
+void moveServo(uint8_t channel, int angle) {
+  int targetAngle = angle;
+
+  // Safe software limits checking (Constraints)
+  if (channel == BASE_CH)  targetAngle = constrain(angle, baseMin, baseMax);
+  if (channel == LEFT_CH)  targetAngle = constrain(angle, leftMin, leftMax);
+  if (channel == RIGHT_CH) targetAngle = constrain(angle, rightMin, rightMax);
+  if (channel == CLAW_CH)  targetAngle = constrain(angle, clawOpen, clawClose);
+
+  // Map angles to PCA9685 12-bit Resolution pulses (150 to 600)
+  int pulse = map(targetAngle, 0, 180, 150, 600); 
+  pwm.setPWM(channel, 0, pulse);
+} 
+```
 ### 📸 Project Photos
 | Hardware Setup | Robotic Arm Side View |
 | :---: | :---: |
-| ![Setup](https://via.placeholder.com/400x300?text=Setup+Photo) | ![Side View](https://via.placeholder.com/400x300?text=Robotic+Arm+Photo) |
-
+| <img width="100%" alt="Hardware Setup" src="https://github.com/user-attachments/assets/e56c211b-a1a4-46a9-927e-90e6ae91505e" /> | <img width="100%" alt="Robotic Arm Side View" src="https://github.com/user-attachments/assets/4e4a0f4c-b2a6-416f-ba5f-47c54feeadf9" /> |
+ 
 ## 🔮 Future Enhancements
 - **Inverse Kinematics**: Implementation of coordinate-based target tracking instead of hardcoded angles.
 - **Ultrasonic Sensors**: Real-time object detection before initiating pick sequences.
 - **Wireless Control**: Integration of an HC-05 Bluetooth module for remote operation.
 - **Computer Vision**: Camera systems integration for fully autonomous object color/shape sorting.
+
+ ## 📚 References
+1. Arduino Uno R3 Official Technical Documentation.
+2. Adafruit PCA9685 16-Channel Servo Driver Library Guide.
+3. Multi-DOF Robotic Manipulators and Linkage Kinematics Analysis.
 
 ---
 **Developed by:** Meshal Talal Al Mehmady  
