@@ -24,7 +24,8 @@ To avoid microcontroller brownouts, the servos are powered by an external 5V 3A 
 - **Common GND:** Essential for signal integrity across all components.
 
 > 📸 **Drop your Wiring Diagram Photo below (اسحب صورة مخطط التوصيل والأردوينو هنا):**
-![System Wiring Diagram](https://via.placeholder.com/800x400?text=Insert+Your+Wiring+Diagram+Here)
+<img width="240" height="210" alt="download" src="https://github.com/user-attachments/assets/b6bd45d2-28ab-4c7f-b1a5-6af1175152b4" />
+
 
 ## 📐 Motion Sequence & Constraints
 To ensure physical protection and mechanical integrity, all joint movements are digitally locked within safety limits via the code logic (`constrain` limits):
