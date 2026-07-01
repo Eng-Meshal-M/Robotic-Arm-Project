@@ -23,10 +23,8 @@ To avoid microcontroller brownouts, the servos are powered by an external 5V 3A 
 - **SDA/SCL:** I2C communication link between Arduino and Driver.
 - **Common GND:** Essential for signal integrity across all components.
 
-> 📸 **Drop your Wiring Diagram Photo below (اسحب صورة مخطط التوصيل والأردوينو هنا):**
-<img width="240" height="210" alt="download" src="https://github.com/user-attachments/assets/b6bd45d2-28ab-4c7f-b1a5-6af1175152b4" />
-
-
+> <img width="687" height="586" alt="image" src="https://github.com/user-attachments/assets/85d2377a-5901-4815-ac53-45f2f3c408a4" />
+ 
 ## 📐 Motion Sequence & Constraints
 To ensure physical protection and mechanical integrity, all joint movements are digitally locked within safety limits via the code logic (`constrain` limits):
 - **Base Joint (`BASE_CH`)**: `0°` to `90°`
